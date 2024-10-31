@@ -3,18 +3,16 @@ import axios from 'axios';
 import UserContext from '../context/UserContext';
 import { useSnackbar } from 'notistack';
 import Spinner from '../components/Spinner';
-import { Navigate } from 'react-router-dom'; // Import Navigate for redirection
+import { Navigate } from 'react-router-dom';
 
 const AllData = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const { user } = useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
-
-  // Check if user is admin
   if (!user || user.role !== 'admin') {
     enqueueSnackbar('You do not have access to this area.', { variant: 'error' });
-    return <Navigate to="/" replace />; // Redirect to home if not admin
+    return <Navigate to="/" replace />;
   }
 
   useEffect(() => {
@@ -30,7 +28,7 @@ const AllData = () => {
       setLoading(true);
 
       try {
-        const response = await axios.get('http://localhost:3500/users', {
+        const response = await axios.get(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/users`,  {
           headers: { Authorization: `Bearer ${token}` }
         });
         setUsers(response.data);

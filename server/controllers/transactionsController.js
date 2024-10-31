@@ -1,11 +1,9 @@
-// controllers/transactionsController.js
 import express from "express";
 import User from "../models/userModel.js";
 import { auth } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-// Deposit Route
 router.post('/deposit', auth, async (req, res) => {
     const { amount } = req.body;
     const userId = req.user.id;
@@ -20,9 +18,9 @@ router.post('/deposit', auth, async (req, res) => {
             return res.status(404).json({ msg: 'User not found' });
         }
 
-        user.balance += amount; // Update balance
-        user.transactionLogs.push(`Deposited $${amount}`); // Log transaction
-        await user.save(); // Save updated user
+        user.balance += amount;
+        user.transactionLogs.push(`Deposited $${amount}`);
+        await user.save();
 
         res.json({ newBalance: user.balance });
     } catch (error) {
@@ -31,7 +29,6 @@ router.post('/deposit', auth, async (req, res) => {
     }
 });
 
-// Withdraw Route
 router.post('/withdraw', auth, async (req, res) => {
     const { amount } = req.body;
     const userId = req.user.id;
@@ -50,9 +47,9 @@ router.post('/withdraw', auth, async (req, res) => {
             return res.status(400).json({ msg: 'Insufficient funds' });
         }
 
-        user.balance -= amount; // Update balance
-        user.transactionLogs.push(`Withdrew $${amount}`); // Log transaction
-        await user.save(); // Save updated user
+        user.balance -= amount;
+        user.transactionLogs.push(`Withdrew $${amount}`);
+        await user.save();
 
         res.json({ newBalance: user.balance });
     } catch (error) {

@@ -42,7 +42,7 @@ const Client = () => {
             headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         };
           const response = await axios.post(
-            'http://localhost:3500/api/transactions/deposit',
+           `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/transactions/deposit`,
             { amount },
             config
         );
@@ -72,7 +72,7 @@ const Client = () => {
       };
 
       const response = await axios.post(
-        'http://localhost:3500/api/transactions/withdraw',
+       `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/transactions/withdraw`,
         { amount },
         config
       );

@@ -22,7 +22,7 @@ const Login = () => {
         setIsLoading(true);
 
         try {
-            const response = await axios.post('http://localhost:3500/auth/login', loginData);
+            const response = await axios.post(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/auth/login`,  loginData);
             const user = response.data.user;
 
             if (user) {
@@ -31,15 +31,12 @@ const Login = () => {
                     name: user.name,
                     balance: user.balance || 0,
                     transactionLogs: user.transactionLogs || [],
-                    role: user.role || 'user', // Include user role
+                    role: user.role || 'user',
                 };
-
                 localStorage.setItem('token', response.data.token);
                 localStorage.setItem('user', JSON.stringify(userData));
                 setUser(userData);
                 enqueueSnackbar('Login successful!', { variant: 'success' });
-
-                // Redirect based on user role
                 if (user.role === 'admin') {
                     navigate('/admin');
                 } else {

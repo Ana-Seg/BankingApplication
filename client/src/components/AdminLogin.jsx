@@ -18,7 +18,7 @@ const AdminLogin = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:3500/auth/login', loginData);
+      const response = await axios.post(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/auth/login`, loginData);
       localStorage.setItem('token', response.data.token);
       if (response.data.user.role === 'admin') {
         setUser(response.data.user);

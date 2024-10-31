@@ -18,7 +18,7 @@ export const UserProvider = ({ children }) => {
                 const parsedUser = JSON.parse(localData);
                 if (parsedUser) {
                     setUser(parsedUser);
-                    setTransactionLogs([]); // Clear logs on initial load
+                    setTransactionLogs([]);
                 }
             } catch (error) {
                 console.error('Error parsing user data:', error);
@@ -30,12 +30,12 @@ export const UserProvider = ({ children }) => {
             const fetchUserData = async () => {
                 try {
                     const config = { headers: { Authorization: `Bearer ${token}` } };
-                    const response = await axios.get('http://localhost:3500/user', config);
+                    const response = await axios.get( `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/user`, config);
                     const fetchedUser = {
                         email: response.data.email,
                         name: response.data.name || '',
                         balance: response.data.balance || 0,
-                        role: response.data.role || 'user', // Include role
+                        role: response.data.role || 'user',
                     };
 
                     setUser(fetchedUser);
@@ -58,7 +58,7 @@ export const UserProvider = ({ children }) => {
             localStorage.setItem('user', JSON.stringify({
                 email: user.email,
                 name: user.name,
-                role: user.role, // Save role to localStorage
+                role: user.role,
             }));
         } else {
             localStorage.removeItem('user');
@@ -81,7 +81,7 @@ export const UserProvider = ({ children }) => {
         setTransactionLogs((prevLogs) => [...prevLogs, log]);
     };
 
-    const isAdmin = () => user?.role === 'admin'; // Optional chaining for safety
+    const isAdmin = () => user?.role === 'admin';
 
     return (
         <UserContext.Provider value={{

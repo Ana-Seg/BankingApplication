@@ -3,7 +3,6 @@ import { Route, Routes, useLocation } from 'react-router-dom';
 import Client from './components/Client';
 import Login from './components/Login';
 import AdminLogin from './components/AdminLogin';
-import AdminRegister from './components/AdminRegister'; // Import new component
 import Register from './components/Register';
 import Logout from './components/Logout';
 import Home from './components/Home';
@@ -35,7 +34,6 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/adminLogin" element={<AdminLogin />} />
-        <Route path="/adminRegister" element={<AdminRegister />} /> {/* New route */}
         <Route path="/register" element={<Register />} />
         <Route path="/logout" element={<Logout />} />
 
@@ -68,7 +66,6 @@ const ClientRoutes = () => {
       <div className="flex-grow">
         <Routes>
           <Route path="/" element={<Client />} />
-          {/* Add other client routes here */}
         </Routes>
       </div>
     </div>
