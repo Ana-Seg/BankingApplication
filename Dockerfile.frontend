@@ -1,11 +1,7 @@
-FROM node:14 AS build
-
-WORKDIR /app
-COPY ./frontend/package*.json ./
+FROM node:alphine3.18
+WORKDIR /usr/src/app
+COPY package.json ./
 RUN npm install
-COPY ./frontend ./
-RUN npm run build
-
-FROM nginx:alpine
-COPY --from=build /app/dist /usr/share/nginx/html
-CMD ["nginx", "-g", "daemon off;"]
+COPY . .
+EXPOSE 4000
+CMD ["npm", "run", "start"]
