@@ -3,7 +3,7 @@ name: CI/CD for MERN Application
 on:
   push:
     branches:
-      - main
+      - main-ec2-docker
 
 jobs:
   build:
@@ -17,13 +17,36 @@ jobs:
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
 
       - name: Build Frontend Docker Image
-        run: docker build -t your-dockerhub-anaseg/banking-application:latest -f frontend/Dockerfile .
+        run: docker build -t anaseg/banking-frontend:latest -f frontend/Dockerfile .
 
       - name: Build Backend Docker Image
-        run: docker build -t your-dockerhub-anaseg/banking-application:latest -f backend/Dockerfile .
+        run: docker build -t anaseg/banking-backend:latest -f backend/Dockerfile .
 
       - name: Push Frontend Image to Docker Hub
-        run: docker push your-dockerhub-anaseg/banking-application:latest
+        run: docker push anaseg/banking-frontend:latest
 
       - name: Push Backend Image to Docker Hub
-        run: docker push your-dockerhub-anaseg/banking-application:latest
+        run: docker push anaseg/banking-backend:latest
+
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    steps:
+      - name: Pull Frontend Image from Docker Hub
+        run: docker pull anaseg/banking-frontend:latest
+
+      - name: Pull Backend Image from Docker Hub
+        run: docker pull anaseg/banking-backend:latest
+
+      - name: Stop and Remove Existing Containers
+        run: |
+          docker stop banking-frontend-container || true
+          docker rm banking-frontend-container || true
+          docker stop banking-backend-container || true
+          docker rm banking-backend-container || true
+
+      - name: Run Frontend Docker Container
+        run: docker run -d -p 80:80 --name banking-frontend-container anaseg/banking-frontend:latest
+
+      - name: Run Backend Docker Container
+        run: docker run -d -p 3000:3000 --name banking-backend-container anaseg/banking-backend:latest
